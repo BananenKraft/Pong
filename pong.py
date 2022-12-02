@@ -1,7 +1,9 @@
 import sys
 import pygame
+import math
 from settings import Settings
 from bat import Bat
+from ball import Ball
 
 def run_game():
 
@@ -21,6 +23,7 @@ def run_game():
     background_color = (30,30,30)
     bat = Bat(screen, 30,50)
     enemy_bat = Bat(screen, screen.get_width()-30, 50)
+    ball = Ball(screen, math.ceil(settings.screen_width/2), math.ceil(settings.screen_height/2))
     moveDown, moveUp = False, False
 
 
@@ -50,6 +53,7 @@ def run_game():
                     
         # Update screen
         screen.fill(background_color)
+        ball.drawCurrent()
         bat.drawCurrent()
         enemy_bat.drawCurrent()
         pygame.display.flip()

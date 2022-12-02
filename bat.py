@@ -3,7 +3,7 @@ import math
 
 class Bat:
 
-    def __init__(self, screen, startX, startY, width=30, height=70):
+    def __init__(self, screen, startX, startY, width=20, height=80):
         self.startX = startX-(math.ceil(width/2))
         self.startY = startY-(math.ceil(height/2))
         self.screen = screen
