@@ -11,3 +11,8 @@ class Ball:
     def drawCurrent(self):
         self.circle = pygame.draw.circle(self.screen, (255,255,255), (self.startX, self.startY), 10)
         return self.circle
+
+    def move(self, speedX, speedY):
+        self.startX += speedX
+        self.startY += speedY
+        

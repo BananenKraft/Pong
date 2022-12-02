@@ -14,9 +14,9 @@ def run_game():
         input_settings = input_settings.split(",")
         settings.screen_width = input_settings[0]
         settings.screen_height = input_settings[1]
-    speed = 1
 
-    # Innit game and screen, bats, and listener
+
+    # Innit game variables and screen, bats, and listener
     pygame.init()
     screen = pygame.display.set_mode((int(settings.screen_width), int(settings.screen_height)))
     pygame.display.set_caption("Pong")
@@ -24,7 +24,10 @@ def run_game():
     bat = Bat(screen, 30,50)
     enemy_bat = Bat(screen, screen.get_width()-30, 50)
     ball = Ball(screen, math.ceil(settings.screen_width/2), math.ceil(settings.screen_height/2))
+    clock = pygame.time.Clock()
     moveDown, moveUp = False, False
+    ballSpeedX, ballSpeedY, batSpeed = -6,-6,6
+
 
 
     #Main game loop
@@ -47,12 +50,26 @@ def run_game():
 
         # Move bat
         if moveUp and bat.rect.top > 0:
-            bat.move(-1)
+            bat.move(batSpeed*-1)
         if moveDown and bat.rect.bottom < settings.screen_height:
-            bat.move(1) 
+            bat.move(batSpeed) 
+
+        # Check for ball collision
+        if ball.circle.top == 0 or ball.circle.bottom == settings.screen_height:
+            ballSpeedY *= -1
+        if bat.rect.colliderect(ball.circle) or enemy_bat.rect.colliderect(ball.circle):
+            ballSpeedX *= -1
+
+        # Make opponent move
+        if enemy_bat.rect.centery < ball.circle.centery:
+            enemy_bat.move(batSpeed)
+        if enemy_bat.rect.centery > ball.circle.centery:
+            enemy_bat.move(batSpeed*-1)
                     
         # Update screen
+        clock.tick(60)
         screen.fill(background_color)
+        ball.move(ballSpeedX, ballSpeedY)
         ball.drawCurrent()
         bat.drawCurrent()
         enemy_bat.drawCurrent()

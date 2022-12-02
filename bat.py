@@ -17,4 +17,3 @@ class Bat:
 
     def move(self,y):
         self.startY += y
-        return self.rect
