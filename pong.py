@@ -27,6 +27,7 @@ def run_game():
     #Main game loop
     while True:
 
+        # Check for inputs
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -41,12 +42,13 @@ def run_game():
                 if event.key == pygame.K_UP:
                     moveUp = False
 
-        
-        if moveUp:
-            bat.move(1)
-        if moveDown:
-            bat.move(-1) 
+        # Move bat
+        if moveUp and bat.rect.top > 0:
+            bat.move(-1)
+        if moveDown and bat.rect.bottom < settings.screen_height:
+            bat.move(1) 
                     
+        # Update screen
         screen.fill(background_color)
         bat.drawCurrent()
         enemy_bat.drawCurrent()
