@@ -12,6 +12,7 @@ def run_game():
         input_settings = input_settings.split(",")
         settings.screen_width = input_settings[0]
         settings.screen_height = input_settings[1]
+    speed = 1
 
     # Innit game and screen, bats, and listener
     pygame.init()
@@ -20,6 +21,8 @@ def run_game():
     background_color = (30,30,30)
     bat = Bat(screen, 30,50)
     enemy_bat = Bat(screen, screen.get_width()-30, 50)
+    moveDown, moveUp = False, False
+
 
     #Main game loop
     while True:
@@ -29,10 +32,20 @@ def run_game():
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
-                    bat.move(-10)
+                    moveDown = True
                 if event.key == pygame.K_UP:
-                    bat.move(10)
-                    print("Done")
+                    moveUp = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    moveDown = False
+                if event.key == pygame.K_UP:
+                    moveUp = False
+
+        
+        if moveUp:
+            bat.move(1)
+        if moveDown:
+            bat.move(-1) 
                     
         screen.fill(background_color)
         bat.drawCurrent()
