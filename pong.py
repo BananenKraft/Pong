@@ -4,6 +4,7 @@ import math
 from settings import Settings
 from bat import Bat
 from ball import Ball
+from random import *
 
 def run_game():
 
@@ -58,7 +59,7 @@ def run_game():
         if ball.circle.top == 0 or ball.circle.bottom == settings.screen_height:
             ballSpeedY *= -1
         if bat.rect.colliderect(ball.circle) or enemy_bat.rect.colliderect(ball.circle):
-            ballSpeedX *= -1
+            ballSpeedX *= randint(100,110)*-0.01
 
         # Make opponent move
         if enemy_bat.rect.centery < ball.circle.centery:
