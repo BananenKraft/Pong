@@ -22,12 +22,12 @@ def run_game():
     screen = pygame.display.set_mode((int(settings.screen_width), int(settings.screen_height)))
     pygame.display.set_caption("Pong")
     background_color = (30,30,30)
-    bat = Bat(screen, 30,50)
-    enemy_bat = Bat(screen, screen.get_width()-30, 50)
-    ball = Ball(screen, math.ceil(settings.screen_width/2), math.ceil(settings.screen_height/2))
+    bat = Bat(screen, 30,50, 0)
+    enemy_bat = Bat(screen, screen.get_width()-30, 50, 0)
+    ball = Ball(screen,math.ceil(settings.screen_width/2), math.ceil(settings.screen_height/2), 0, 0)
     clock = pygame.time.Clock()
     moveDown, moveUp = False, False
-    ballSpeedX, ballSpeedY, batSpeed = -6,-6,6
+    playerScore, enemyScore = 0,0
 
 
 
@@ -43,6 +43,9 @@ def run_game():
                     moveDown = True
                 if event.key == pygame.K_UP:
                     moveUp = True
+                if event.key == pygame.K_s:
+                    ball.speedX, ball.speedY, bat.speed, enemy_bat.speed = -6, -6, 6, 6
+                    
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
                     moveDown = False
@@ -51,26 +54,41 @@ def run_game():
 
         # Move bat
         if moveUp and bat.rect.top > 0:
-            bat.move(batSpeed*-1)
+            bat.move(False)
         if moveDown and bat.rect.bottom < settings.screen_height:
-            bat.move(batSpeed) 
+            bat.move(True) 
 
         # Check for ball collision
         if ball.circle.top == 0 or ball.circle.bottom == settings.screen_height:
-            ballSpeedY *= -1
-        if bat.rect.colliderect(ball.circle) or enemy_bat.rect.colliderect(ball.circle):
-            ballSpeedX *= randint(100,110)*-0.01
+            ball.speedY *= -1
+        if bat.rect.colliderect(ball.circle):
+            ball.speedX *= randint(100,110)*-0.01
+            ball.speedY *= randint(100,110)*0.01
+            ball.startX += 10
+        if enemy_bat.rect.colliderect(ball.circle):
+            ball.speedX *= randint(100,110)*-0.01
+            ball.speedY *= randint(100,110)*0.01
+            ball.startX -= 10
+
+        # Check for score
+        if ball.circle.left < 0:
+            enemyScore += 1
+            ball.reset()
+        if ball.circle.right > settings.screen_width:
+            playerScore += 1
+            ball.reset()
+            
 
         # Make opponent move
         if enemy_bat.rect.centery < ball.circle.centery:
-            enemy_bat.move(batSpeed)
+            enemy_bat.move(True)
         if enemy_bat.rect.centery > ball.circle.centery:
-            enemy_bat.move(batSpeed*-1)
+            enemy_bat.move(False)
                     
         # Update screen
         clock.tick(60)
         screen.fill(background_color)
-        ball.move(ballSpeedX, ballSpeedY)
+        ball.move()
         ball.drawCurrent()
         bat.drawCurrent()
         enemy_bat.drawCurrent()
