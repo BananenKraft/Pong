@@ -19,6 +19,8 @@ def run_game():
 
     # Innit game variables and screen, bats, and listener
     pygame.init()
+    pygame.font.init()
+    font = pygame.font.SysFont('Arial', 40)
     screen = pygame.display.set_mode((int(settings.screen_width), int(settings.screen_height)))
     pygame.display.set_caption("Pong")
     background_color = (30,30,30)
@@ -27,7 +29,6 @@ def run_game():
     ball = Ball(screen,math.ceil(settings.screen_width/2), math.ceil(settings.screen_height/2), 0, 0)
     clock = pygame.time.Clock()
     moveDown, moveUp = False, False
-    playerScore, enemyScore = 0,0
 
 
 
@@ -44,7 +45,7 @@ def run_game():
                 if event.key == pygame.K_UP:
                     moveUp = True
                 if event.key == pygame.K_s:
-                    ball.speedX, ball.speedY, bat.speed, enemy_bat.speed = -6, -6, 6, 6
+                    ball.speedX, ball.speedY, bat.speed, enemy_bat.speed = -5, -5, 6, 6
                     
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
@@ -72,10 +73,10 @@ def run_game():
 
         # Check for score
         if ball.circle.left < 0:
-            enemyScore += 1
+            enemy_bat.score += 1
             ball.reset()
         if ball.circle.right > settings.screen_width:
-            playerScore += 1
+            bat.score += 1
             ball.reset()
             
 
@@ -92,6 +93,8 @@ def run_game():
         ball.drawCurrent()
         bat.drawCurrent()
         enemy_bat.drawCurrent()
+        screen.blit(font.render(str(bat.score), True, (255,255,255)), (math.ceil(settings.screen_width*0.4), math.ceil(settings.screen_height*0.1)))
+        screen.blit(font.render(str(enemy_bat.score), True, (255,255,255)), (math.ceil(settings.screen_width*0.6), math.ceil(settings.screen_height*0.1)))
         pygame.display.flip()
 
 run_game()

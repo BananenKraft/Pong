@@ -11,6 +11,7 @@ class Bat:
         self.width = width
         self.height = height
         self.rect = self.drawCurrent()
+        self.score = 0
 
     def drawCurrent(self):
         self.rect = pygame.draw.rect(self.screen, (255,255,255), pygame.Rect(self.startX, self.startY, self.width, self.height))
